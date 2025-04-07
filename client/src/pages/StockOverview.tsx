@@ -512,16 +512,7 @@ export default function StockOverview({
                   <tr key={product.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
-                        <div className="h-10 w-10 flex-shrink-0">
-                          <img
-                            className="h-10 w-10 rounded-full object-cover"
-                            src={
-                              product.imageUrl ||
-                              "/placeholder.svg?height=40&width=40"
-                            }
-                            alt={product.name}
-                          />
-                        </div>
+                        
                         <div className="ml-4">
                           <div className="text-sm font-medium text-gray-900">
                             {product.name}
