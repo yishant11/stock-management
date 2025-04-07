@@ -1,39 +1,37 @@
-export interface Product {
+// src/types.ts
+
+export type Product = {
   id: string;
   name: string;
   category: string;
   price: number;
-  quantityInStock: number;
+  stockQuantity: number; // Must be here
+  itemsSold: number; // Must be here
   description: string;
-  sold?: number;
-  imageUrl?: string;
-  createdAt: Date;
-}
+  imageUrl: string;
+};
 
-export interface ProductFormData {
+export type ProductFormData = {
   name: string;
   category: string;
   price: number;
-  quantityInStock: number;
+  stockQuantity: number; // Must be here as well
   description: string;
-  imageUrl?: string;
-}
+  imageUrl: string;
+};
 
-export type SortField =
-  | "name"
-  | "category"
-  | "price"
-  | "quantityInStock"
-  | "sold";
-export type SortDirection = "asc" | "desc";
+export type SortField = keyof Pick<
+  Product,
+  "name" | "category" | "price" | "stockQuantity" | "itemsSold"
+>;
 
-export interface SortConfig {
+export type SortConfig = {
   field: SortField;
-  direction: SortDirection;
-}
+  direction: "asc" | "desc";
+};
 
-export interface FilterConfig {
+export type FilterConfig = {
   category: string;
   search: string;
   stockStatus: "all" | "inStock" | "lowStock" | "outOfStock";
-}
+};

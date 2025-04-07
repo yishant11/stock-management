@@ -1,3 +1,5 @@
+// src/pages/StockOverview.tsx
+
 import type React from "react";
 import { useState, useMemo } from "react";
 import {
@@ -27,7 +29,7 @@ import type { Product, SortConfig, FilterConfig, SortField } from "../types";
 import {
   getUniqueCategories,
   calculateTotalRevenue,
-  calculateTotalSold,
+  calculateTotalitemsSold,
   calculateLowStockCount,
   calculateOutOfStockCount,
 } from "../data/mockData";
@@ -63,7 +65,10 @@ export default function StockOverview({
     () => calculateTotalRevenue(products),
     [products]
   );
-  const totalSold = useMemo(() => calculateTotalSold(products), [products]);
+  const totalSold = useMemo(
+    () => calculateTotalitemsSold(products),
+    [products]
+  );
   const lowStockCount = useMemo(
     () => calculateLowStockCount(products),
     [products]
@@ -110,7 +115,6 @@ export default function StockOverview({
 
   const filteredProducts = useMemo(() => {
     return products.filter((product) => {
-      // Category filter
       if (
         filterConfig.category !== "all" &&
         product.category !== filterConfig.category
@@ -118,7 +122,6 @@ export default function StockOverview({
         return false;
       }
 
-      // Stock status filter using stockQuantity from backend
       if (
         filterConfig.stockStatus === "inStock" &&
         product.stockQuantity <= 0
@@ -136,7 +139,6 @@ export default function StockOverview({
         return false;
       }
 
-      // Search filter
       if (filterConfig.search) {
         const searchTerm = filterConfig.search.toLowerCase();
         return (
@@ -150,36 +152,33 @@ export default function StockOverview({
     });
   }, [products, filterConfig]);
 
-  const sortedProducts = useMemo(() => {
-    return [...filteredProducts].sort((a, b) => {
-      const aValue = a[sortConfig.field] as string | number;
-      const bValue = b[sortConfig.field] as string | number;
+  // const sortedProducts = useMemo(() => {
+  //   return [...filteredProducts].sort((a, b) => {
+  //     const aValue = a[sortConfig.field] as string | number;
+  //     const bValue = b[sortConfig.field] as string | number;
 
-      if (typeof aValue === "string" && typeof bValue === "string") {
-        return sortConfig.direction === "asc"
-          ? aValue.localeCompare(bValue)
-          : bValue.localeCompare(aValue);
-      } else {
-        const numA = aValue as number;
-        const numB = bValue as number;
-        return sortConfig.direction === "asc" ? numA - numB : numB - numA;
-      }
-    });
-  }, [filteredProducts, sortConfig]);
+  //     if (typeof aValue === "string" && typeof bValue === "string") {
+  //       return sortConfig.direction === "asc"
+  //         ? aValue.localeCompare(bValue)
+  //         : bValue.localeCompare(aValue);
+  //     } else {
+  //       const numA = aValue as number;
+  //       const numB = bValue as number;
+  //       return sortConfig.direction === "asc" ? numA - numB : numB - numA;
+  //     }
+  //   });
+  // }, [filteredProducts, sortConfig]);
 
-  // Data for charts: using itemsSold from backend
   const categoryData = useMemo(() => {
     const data: Record<string, { sold: number; revenue: number }> = {};
-
     products.forEach((product) => {
       if (!data[product.category]) {
         data[product.category] = { sold: 0, revenue: 0 };
       }
-
       data[product.category].sold += product.itemsSold || 0;
-      data[product.category].revenue += (product.itemsSold || 0) * product.price;
+      data[product.category].revenue +=
+        (product.itemsSold || 0) * product.price;
     });
-
     return Object.entries(data).map(([name, values]) => ({
       name,
       sold: values.sold,
@@ -200,7 +199,6 @@ export default function StockOverview({
 
   const COLORS = ["#10b981", "#f59e0b", "#ef4444"];
 
-  // Top selling products using itemsSold
   const topSellingProducts = useMemo(() => {
     return [...products]
       .sort((a, b) => (b.itemsSold || 0) - (a.itemsSold || 0))
@@ -220,7 +218,6 @@ export default function StockOverview({
         Stock Overview & Analytics
       </h1>
 
-      {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-white p-6 rounded-lg shadow-md">
           <h3 className="text-sm font-medium text-gray-500">Total Products</h3>
@@ -249,9 +246,7 @@ export default function StockOverview({
         </div>
       </div>
 
-      {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Sales by Category */}
         <div className="bg-white p-6 rounded-lg shadow-md">
           <h2 className="text-lg font-semibold mb-4">Sales by Category</h2>
           <div className="h-80">
@@ -280,7 +275,6 @@ export default function StockOverview({
           </div>
         </div>
 
-        {/* Stock Status */}
         <div className="bg-white p-6 rounded-lg shadow-md">
           <h2 className="text-lg font-semibold mb-4">Stock Status</h2>
           <div className="h-80">
@@ -298,7 +292,7 @@ export default function StockOverview({
                     `${name}: ${(percent * 100).toFixed(0)}%`
                   }
                 >
-                  {stockStatusData.map((entry, index) => (
+                  {stockStatusData.map((_, index) => (
                     <Cell
                       key={`cell-${index}`}
                       fill={COLORS[index % COLORS.length]}
@@ -312,7 +306,6 @@ export default function StockOverview({
           </div>
         </div>
 
-        {/* Top Selling Products */}
         <div className="bg-white p-6 rounded-lg shadow-md">
           <h2 className="text-lg font-semibold mb-4">Top Selling Products</h2>
           <div className="h-80">
@@ -329,7 +322,6 @@ export default function StockOverview({
           </div>
         </div>
 
-        {/* Revenue Trend */}
         <div className="bg-white p-6 rounded-lg shadow-md">
           <h2 className="text-lg font-semibold mb-4">Revenue by Category</h2>
           <div className="h-80">
@@ -353,7 +345,6 @@ export default function StockOverview({
         </div>
       </div>
 
-      {/* Filters and Stock Table */}
       <div className="bg-white rounded-lg shadow-md overflow-hidden">
         <div className="p-4 border-b">
           <div className="flex flex-col md:flex-row gap-4">
@@ -510,14 +501,14 @@ export default function StockOverview({
                       ))}
                   </div>
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Actions
                 </th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {sortedProducts.length > 0 ? (
-                sortedProducts.map((product) => (
+              {filteredProducts.length > 0 ? (
+                filteredProducts.map((product) => (
                   <tr key={product.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
@@ -562,7 +553,7 @@ export default function StockOverview({
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       {product.itemsSold || 0}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm">
+                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <div className="flex items-center space-x-2">
                         <input
                           type="number"

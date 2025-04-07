@@ -83,8 +83,8 @@ export function generateMockProducts(count: number): Product[] {
       descriptions[Math.floor(Math.random() * descriptions.length)];
 
     const price = Number.parseFloat((Math.random() * 50 + 0.99).toFixed(2));
-    const quantityInStock = Math.floor(Math.random() * 100);
-    const sold = Math.floor(Math.random() * 200);
+    const stockQuantity = Math.floor(Math.random() * 100);
+    const itemsSold = Math.floor(Math.random() * 200);
 
     // Create a date within the last 30 days
     const createdAt = new Date();
@@ -95,16 +95,15 @@ export function generateMockProducts(count: number): Product[] {
       name: `${randomName} ${i + 1}`,
       category: randomCategory,
       price,
-      quantityInStock,
+      stockQuantity,
       description: `${randomDescription} ${randomName.toLowerCase()}.`,
-      sold,
+      itemsSold,
       // Use mapped image URL if available; otherwise, fall back to placeholder
       imageUrl:
         googleImageMapping[randomName] ||
         `/placeholder.svg?height=100&width=100&text=${encodeURIComponent(
           randomName
         )}`,
-      createdAt,
     });
   }
 
@@ -117,13 +116,13 @@ export function getUniqueCategories(products: Product[]): string[] {
 
 export function calculateTotalRevenue(products: Product[]): number {
   return products.reduce((total, product) => {
-    return total + product.price * (product.sold || 0);
+    return total + product.price * (product.itemsSold || 0);
   }, 0);
 }
 
-export function calculateTotalSold(products: Product[]): number {
+export function calculateTotalitemsSold(products: Product[]): number {
   return products.reduce((total, product) => {
-    return total + (product.sold || 0);
+    return total + (product.itemsSold || 0);
   }, 0);
 }
 
@@ -132,11 +131,10 @@ export function calculateLowStockCount(
   threshold = 10
 ): number {
   return products.filter(
-    (product) =>
-      product.quantityInStock > 0 && product.quantityInStock <= threshold
+    (product) => product.stockQuantity > 0 && product.stockQuantity <= threshold
   ).length;
 }
 
 export function calculateOutOfStockCount(products: Product[]): number {
-  return products.filter((product) => product.quantityInStock === 0).length;
+  return products.filter((product) => product.stockQuantity === 0).length;
 }

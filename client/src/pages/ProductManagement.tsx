@@ -1,3 +1,5 @@
+// src/pages/ProductManagement.tsx
+
 import type React from "react";
 import { useState } from "react";
 import type { Product, ProductFormData } from "../types";
@@ -24,7 +26,7 @@ export default function ProductManagement({
     name: "",
     category: "",
     price: 0,
-    stockQuantity: 0,
+    stockQuantity: 0, // Now part of ProductFormData
     description: "",
     imageUrl: "",
   };
@@ -58,7 +60,7 @@ export default function ProductManagement({
       onAdd({
         ...formData,
         id: Date.now().toString(),
-        itemsSold: 0,
+        itemsSold: 0, // New product starts with 0 sold
       });
     }
 
@@ -71,7 +73,7 @@ export default function ProductManagement({
       name: product.name,
       category: product.category,
       price: product.price,
-      stockQuantity: product.stockQuantity,
+      stockQuantity: product.stockQuantity, // From Product type
       description: product.description,
       imageUrl: product.imageUrl,
     });
@@ -266,8 +268,8 @@ export default function ProductManagement({
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {filteredProducts.length > 0 ? (
-                filteredProducts.map((product, index) => (
-                  <tr key={product.id || index} className="hover:bg-gray-50">
+                filteredProducts.map((product) => (
+                  <tr key={product.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         <div className="h-10 w-10 flex-shrink-0">

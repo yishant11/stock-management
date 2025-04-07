@@ -10,7 +10,7 @@ export default function App() {
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch("http://localhost:3000/products/getproducts");
+      const response = await fetch("https://stock-management-qsaf.onrender.com/products/getproducts");
       if (response.ok) {
         const data = await response.json();
         console.log("GetData", data);
@@ -29,7 +29,7 @@ export default function App() {
 
   const addProduct = async (product: Product) => {
     try {
-      const response = await fetch("http://localhost:3000/products/create", {
+      const response = await fetch("https://stock-management-qsaf.onrender.com/products/create", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(product),
@@ -46,7 +46,7 @@ export default function App() {
 
   const updateProduct = async (updatedProduct: Product) => {
     try {
-      const response = await fetch(`http://localhost:3000/products/${updatedProduct.id}`, {
+      const response = await fetch(`https://stock-management-qsaf.onrender.com/products/${updatedProduct.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedProduct),
@@ -63,7 +63,7 @@ export default function App() {
 
   const deleteProduct = async (id: string) => {
     try {
-      const response = await fetch(`http://localhost:3000/products/${id}`, {
+      const response = await fetch(`https://stock-management-qsaf.onrender.com/products/${id}`, {
         method: "DELETE",
       });
       if (response.ok) {
@@ -79,7 +79,7 @@ export default function App() {
   const updateStock = async (productId: string, quantity: number) => {
     try {
       // POST /purchase endpoint to update stock
-      const response = await fetch("http://localhost:3000/purchase/purchaseStock", {
+      const response = await fetch("https://stock-management-qsaf.onrender.com/purchase/purchaseStock", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ productId, quantity }),
