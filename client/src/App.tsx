@@ -46,7 +46,7 @@ export default function App() {
 
   const updateProduct = async (updatedProduct: Product) => {
     try {
-      const response = await fetch(`https://stock-management-qsaf.onrender.com/products/${updatedProduct.id}`, {
+      const response = await fetch(`https://stock-management-qsaf.onrender.com/products/${updatedProduct._id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedProduct),
