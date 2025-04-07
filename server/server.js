@@ -17,7 +17,7 @@ app.use(bodyParser.json());
 
 app.use(
   cors({
-    origin: "https://stock-management-j3ou.vercel.app",
+    origin: "https://stock-management-9p7w.vercel.app",
     credentials: true,
   })
 );
