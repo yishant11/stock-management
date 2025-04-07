@@ -91,7 +91,7 @@ export function generateMockProducts(count: number): Product[] {
     createdAt.setDate(createdAt.getDate() - Math.floor(Math.random() * 30));
 
     products.push({
-      id: (i + 1).toString(),
+      _id: (i + 1).toString(),
       name: `${randomName} ${i + 1}`,
       category: randomCategory,
       price,

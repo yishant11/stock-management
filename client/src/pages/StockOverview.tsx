@@ -1,5 +1,3 @@
-// src/pages/StockOverview.tsx
-
 import type React from "react";
 import { useState, useMemo } from "react";
 import {
@@ -509,10 +507,9 @@ export default function StockOverview({
             <tbody className="bg-white divide-y divide-gray-200">
               {filteredProducts.length > 0 ? (
                 filteredProducts.map((product) => (
-                  <tr key={product.id} className="hover:bg-gray-50">
+                  <tr key={product._id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
-                        
                         <div className="ml-4">
                           <div className="text-sm font-medium text-gray-900">
                             {product.name}
@@ -550,21 +547,21 @@ export default function StockOverview({
                           type="number"
                           min="1"
                           max={product.stockQuantity}
-                          value={sellQuantity[product.id] || ""}
+                          value={sellQuantity[product._id] || ""}
                           onChange={(e) =>
-                            handleSellQuantityChange(e, product.id)
+                            handleSellQuantityChange(e, product._id)
                           }
                           disabled={product.stockQuantity === 0}
                           className="w-16 p-1 border border-gray-300 rounded-md"
                           placeholder="Qty"
                         />
                         <button
-                          onClick={() => handleSell(product.id)}
+                          onClick={() => handleSell(product._id)}
                           disabled={
                             product.stockQuantity === 0 ||
-                            !sellQuantity[product.id] ||
-                            sellQuantity[product.id] <= 0 ||
-                            sellQuantity[product.id] > product.stockQuantity
+                            !sellQuantity[product._id] ||
+                            sellQuantity[product._id] <= 0 ||
+                            sellQuantity[product._id] > product.stockQuantity
                           }
                           className="flex items-center p-1 bg-emerald-600 text-white rounded-md hover:bg-emerald-700 disabled:bg-gray-300 disabled:cursor-not-allowed"
                         >

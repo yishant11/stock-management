@@ -1,5 +1,3 @@
-// src/pages/ProductManagement.tsx
-
 import type React from "react";
 import { useState } from "react";
 import type { Product, ProductFormData } from "../types";
@@ -59,7 +57,7 @@ export default function ProductManagement({
     } else {
       onAdd({
         ...formData,
-        id: Date.now().toString(),
+        _id: Date.now().toString(),
         itemsSold: 0, // New product starts with 0 sold
       });
     }
@@ -92,6 +90,8 @@ export default function ProductManagement({
       product.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
       product.description.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  console.log("Filtered Products:", filteredProducts);
 
   return (
     <div className="space-y-6">
@@ -269,10 +269,9 @@ export default function ProductManagement({
             <tbody className="bg-white divide-y divide-gray-200">
               {filteredProducts.length > 0 ? (
                 filteredProducts.map((product) => (
-                  <tr key={product.id} className="hover:bg-gray-50">
+                  <tr key={product._id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
-                        
                         <div className="ml-4">
                           <div className="text-sm font-medium text-gray-900">
                             {product.name}
@@ -315,7 +314,10 @@ export default function ProductManagement({
                         <Edit className="h-5 w-5" />
                       </button>
                       <button
-                        onClick={() => onDelete(product._id)}
+                        onClick={() => {
+                          console.log("Product Id is : ", product._id);
+                          onDelete(product._id);
+                        }}
                         className="text-red-600 hover:text-red-900"
                       >
                         <Trash2 className="h-5 w-5" />
